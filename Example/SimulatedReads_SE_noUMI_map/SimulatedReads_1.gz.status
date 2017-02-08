@@ -1,0 +1,3 @@
+Reads: SimulatedReads_SE_noUMI_map/SimulatedReads_1.fq.gz_trimmed.fq
+SampleName: SimulatedReads_SE_noUMI_map/SimulatedReads_1.gz
+Aligning with /home/ddiep/softwares/bwa-0.7.5a/bwa
