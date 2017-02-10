@@ -24,7 +24,7 @@ sub main{
 	my %opts = ();
 	getopts('i:s:v:b:p:d:c:m:t:', \%opts);
 	die( printUsage() ) if(@ARGV == 0 and !$opts{i});
-	$num_cpu = $opts{t};
+	$num_cpu = $opts{t} if($opts{t});
 	die("[MasterBisReadMapper] No sam file provided.\n") if(!$opts{i});
 	open(INFILE, "$opts{i}") || die("Cannot open input file(s) list\n");
 	while(my $line = <INFILE>){
