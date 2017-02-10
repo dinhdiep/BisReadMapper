@@ -248,7 +248,7 @@ sub sam_to_methyl{
 		($dir, $file, $phred_base, $clonal_id_method) = split /\t/, $record;
 		#process this file
 		my $cmd = "cat $dir/$file >> $sam_file";
-		if(system($cmd) != 0) {warn "[MasterBisReadMapper] Failed to merge sam files (exit $?): $!\nCommand used:\n\t$cmd\n"; return 1;}
+		if(system($cmd) != 0) { print "[MasterBisReadMapper] Missing chromosome sam files: $dir/$file";}
 	}	
 	# ==== convert to bam, sort, and rmdup ==== #
 	my $cmd = "$samtools view -ubSt $ref_fai $sam_file > $bam_file.bam";
