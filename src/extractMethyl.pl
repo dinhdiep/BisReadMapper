@@ -40,8 +40,13 @@ sub main{
 		my $index = $f[0]. ":". $f[1];
 		if($cpgTable{$index}){
 			my ($context, $str) = split ":", $cpgTable{$index};
+<<<<<<< HEAD
 			print "Unexpected base at $index\n" if($f[2] !~ m/c/i && $str eq "W");
 			print "Unexpected base at $index\n" if($f[2] !~ m/g/i && $str eq "C");
+=======
+			#print "Unexpected base at $index\n" if($f[2] !~ m/c/i && $str eq "W");
+			#print "Unexpected base at $index\n" if($f[2] !~ m/g/i && $str eq "C");
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 			my %variantStat = pileupFields2variantStat(\@f, 0, $str, $context);
 		}else{
 			$f[1]--;
@@ -50,7 +55,11 @@ sub main{
 				#this is on CG with C on the Crick strand, only applies to CG positions
 				my ($context, $str) = split ":", $cpgTable{$indexC};
 				next if($context ne "CG");
+<<<<<<< HEAD
 				print "Unexpected base at $index\n" if($f[2] !~ m/g/i);
+=======
+				#print "Unexpected base at $index\n" if($f[2] !~ m/g/i);
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 				my %variantStat = pileupFields2variantStat(\@f, 0, "C", $context);
 			}
 		}	

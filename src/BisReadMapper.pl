@@ -128,7 +128,11 @@ sub main(){
 	undef %chrSizes;
 	my $total_mreads = 0;
 	foreach my $chr(keys %countReads){
+<<<<<<< HEAD
 		print "chr\t", $chr, "\t", $countReads{$chr}, "\n";
+=======
+		print $chr, "\t", $countReads{$chr}, "\n";
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 		$total_mreads += $countReads{$chr};
 	}
 	print "Total sequences\t$total_reads\n";
@@ -222,8 +226,14 @@ sub sortsam{
 	while(my $line =  <SAM_IN>){
 		#next if($line =~ m/XS:i/ && $bowtie2_exe);
 		my @fields = split(/\t/, $line);
+<<<<<<< HEAD
 		next if(scalar(@fields) < 5); # skip the header lines
 		#next if($fields[4] < 5); # skip if MAPQ is less than 5
+=======
+		#next if(scalar(@fields) < 5); # skip the header lines
+		#next if($fields[4] < 5); # skip if MAPQ is less than 5
+		next if(scalar(@fields) < 5 or $fields[0] =~ /^@/);
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 		if($fields[5]){ # CIGAR
 			next if($fields[5] eq "*");
 			my @cigar_str = split(/(\d+)/, $fields[5]);

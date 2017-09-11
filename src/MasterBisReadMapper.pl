@@ -18,11 +18,21 @@ my ($cpg_list, $snp_list, $target_bed) = (0,0,0);
 my ($ref_dbsnp, $ref_fai, $ref_fa) = (0,0,0);
 my ($mapper, $trimgalore) = (0,0);
 my ($template_fwd, $template_rev) = (0,0);
+<<<<<<< HEAD
 
 sub main{
 	my %opts = ();
 	getopts('i:s:v:b:p:d:c:m:', \%opts);
 	die( printUsage() ) if(@ARGV == 0 and !$opts{i});
+=======
+my $num_cpu = 4;
+
+sub main{
+	my %opts = ();
+	getopts('i:s:v:b:p:d:c:m:t:', \%opts);
+	die( printUsage() ) if(@ARGV == 0 and !$opts{i});
+	$num_cpu = $opts{t} if($opts{t});
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 	die("[MasterBisReadMapper] No sam file provided.\n") if(!$opts{i});
 	open(INFILE, "$opts{i}") || die("Cannot open input file(s) list\n");
 	while(my $line = <INFILE>){
@@ -84,10 +94,18 @@ sub main{
 		my @records = @{$read_files{$name}->{"data"}};
 		for(my $i = 0; $i < scalar(@records); $i++){
 			my ($dir, $read1_and_read2, $phred_base, $clonal_method, $adaptor_r1, $adaptor_r2, $trim_mode) = split /\t/, $records[$i];
+<<<<<<< HEAD
 			$trim_mode = uc($trim_mode);
 			my ($read1, $read2) = ($read1_and_read2, 0);
 			($read1, $read2) = split ",", $read1_and_read2 if($read1_and_read2 =~ s/,/,/g);
 			my $fqname = $read1;
+=======
+			#print "$clonal_method\n";
+			$trim_mode = uc($trim_mode);
+			my ($read1, $read2) = ($read1_and_read2, 0);
+			($read1, $read2) = split ",", $read1_and_read2 if($read1_and_read2 =~ s/,/,/g);
+			my $fqname = "r$i.$read1";
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 			$fqname =~ s/.fq//g;
 			$fqname =~ s/.fastq//g;
 			$fqname = $fqname. ".PE" if($read2);
@@ -104,9 +122,15 @@ sub main{
 			open(IN_STATUS, "$out_dir/$fqname.status") || warn("[MasterBisReadMapper] Cannot read status file: $out_dir/$fqname.status\n");
 			while(my $line = <IN_STATUS>){
 				chomp($line);
+<<<<<<< HEAD
 				if($line =~ m/^chr/){
 					my @tmp = split "\t", $line;
 					my $chr = $tmp[1];
+=======
+				if($line =~ m/^chr/ or $line =~ m/^Lambda/){
+					my @tmp = split "\t", $line;
+					my $chr = $tmp[0];
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 					my $file = "$fqname.$chr.sorted.sam";
 					if($opts{c} and $opts{c} eq "yes"){
 						my $cur_name = $name ."." . $chr;
@@ -183,7 +207,11 @@ sub process_fastq{
 	
 	#### trim galore ####
 	if($read2){
+<<<<<<< HEAD
 		$cmd = "$trimgalore --phred$phred_base -o $out_dir --suppress_warn --dont_gzip $trimOpts -a $adaptor_r1 -a2 $adaptor_r2 $dir/$read1 $dir/$read2";
+=======
+		$cmd = "$trimgalore --stringency 5 --phred$phred_base -o $out_dir --suppress_warn --dont_gzip $trimOpts -a $adaptor_r1 -a2 $adaptor_r2 $dir/$read1 $dir/$read2";
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 		if(system($cmd) != 0) {warn "[MasterBisReadMapper] Failed to run trimgalore (exit $?): $!\nCommand used:\n\t$cmd\n"; return 1;}
 		#unlink("$dir/$read1");
 		#unlink("$dir/$read2");
@@ -203,17 +231,30 @@ sub process_fastq{
 		if(system($cmd) != 0) {warn "[MasterBisReadMapper] Failed to concatenate all read files (exit $?): $!\nCommand used:\n\t$cmd\n"; return 1;}
 		#unlink("$dir/$read2");
 	}else{
+<<<<<<< HEAD
 		$cmd = "$trimgalore --phred$phred_base -o $out_dir --suppress_warn --dont_gzip $trimOpts -a $adaptor_r1 $dir/$read1";
+=======
+		$cmd = "$trimgalore --stringency 5 --phred$phred_base -o $out_dir --suppress_warn --dont_gzip $trimOpts -a $adaptor_r1 $dir/$read1";
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 		if(system($cmd) != 0) {warn "[MasterBisReadMapper] Failed to run trimgalore (exit $?): $!\nCommand used:\n\t$cmd\n"; return 1;}
 		#unlink("$dir/$read1");
 		$read1 =~ s/\.fq$//g;
                 $read1 =~ s/\.fastq$//g;
+<<<<<<< HEAD
+=======
+		$read1 =~ s/\.fq.gz$//g;
+		$read1 =~ s/\.fastq.gz$//g;
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 		$read1 = $read1."_trimmed.fq";
 		$dir = $out_dir;
 	}
 	
 	#### bisreadmapper ####
+<<<<<<< HEAD
 	$cmd = "$scripts_dir/BisReadMapper.pl -r $dir/$read1 -W $template_fwd -C $template_rev -g $ref_fai -a $mapper -b $phred_base -p 4 -n $out_dir/$name > $out_dir/$name.status";
+=======
+	$cmd = "$scripts_dir/BisReadMapper.pl -r $dir/$read1 -W $template_fwd -C $template_rev -g $ref_fai -a $mapper -b $phred_base -p $num_cpu -n $out_dir/$name > $out_dir/$name.status";
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 	print "[MasterBisReadMapper] Begins BisReadMapper...\n";
 	if(system($cmd) != 0){warn "[MasterBisReadMapper] Failed to run BisReadMapper (exit $?): $!\nCommand used:\n\t$cmd\n"; return 1;}
 	#unlink("$dir/$read1");
@@ -243,7 +284,11 @@ sub sam_to_methyl{
 		($dir, $file, $phred_base, $clonal_id_method) = split /\t/, $record;
 		#process this file
 		my $cmd = "cat $dir/$file >> $sam_file";
+<<<<<<< HEAD
 		if(system($cmd) != 0) {warn "[MasterBisReadMapper] Failed to merge sam files (exit $?): $!\nCommand used:\n\t$cmd\n"; return 1;}
+=======
+		if(system($cmd) != 0) { print "[MasterBisReadMapper] Missing chromosome sam files: $dir/$file";}
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 	}	
 	# ==== convert to bam, sort, and rmdup ==== #
 	my $cmd = "$samtools view -ubSt $ref_fai $sam_file > $bam_file.bam";
@@ -251,7 +296,11 @@ sub sam_to_methyl{
 	unlink("$sam_file");
 	
 	# ==== fix mate information ===== #
+<<<<<<< HEAD
 	$cmd = "$samtools view $bam_file.bam | sort -k 1,1 | $scripts_dir/fixMateInfo.pl | $samtools view -bSt $ref_fai - | $samtools sort -o $bam_file.sorted.bam -";
+=======
+	$cmd = "$samtools view $bam_file.bam | sort -k 1,1 | $scripts_dir/fixMateInfo.pl | $samtools view -bSt $ref_fai - | $samtools sort - $bam_file.sorted";
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 	#$cmd = "$samtools sort $bam_file.bam $bam_file.sorted";
 	if(system($cmd) != 0) {warn "[MasterBisReadMapper] Failed to fixMateInfo (exit $?): $!\nCommand used:\n\t$cmd\n";return 1;}
 	unlink("$bam_file.bam");
@@ -367,6 +416,10 @@ sub printUsage{
 	print "        -p [yes/no]            : keep pileup yes or no[Default no]\n";
 	print "        -m [yes/no]            : Map only, do not make methylFreq [Default no]\n";
 	print "        -d <mindepth>          : minimum depth for BED and frCorr[Default 5]\n";
+<<<<<<< HEAD
+=======
+	print "        -t <num_cpu>           : number of cpu threads used for mapping[Default 4]\n";
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 }
 
 main();

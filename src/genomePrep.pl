@@ -68,11 +68,19 @@ sub read_variants{
 }
 
 sub process_genome{
+<<<<<<< HEAD
 	my $genome = shift;
 	if($genome =~ /\.gz$/) {
 		open(IN, "gunzip -c $genome |") || printUsage("Can't open pipe to $genome\n");
 	}else{
 		open(IN, $genome) || printUsage("Can't open $genome\n");
+=======
+	my $genome_path = shift;
+	if($genome_path =~ /\.gz$/) {
+		open(IN, "gunzip -c $genome_path |") || printUsage("Can't open pipe to $genome_path\n");
+	}else{
+		open(IN, $genome_path) || printUsage("Can't open $genome_path\n");
+>>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 	}
 	my $line = <IN>;
 	chop($line);
