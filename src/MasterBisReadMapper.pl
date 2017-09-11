@@ -18,13 +18,6 @@ my ($cpg_list, $snp_list, $target_bed) = (0,0,0);
 my ($ref_dbsnp, $ref_fai, $ref_fa) = (0,0,0);
 my ($mapper, $trimgalore) = (0,0);
 my ($template_fwd, $template_rev) = (0,0);
-<<<<<<< HEAD
-
-sub main{
-	my %opts = ();
-	getopts('i:s:v:b:p:d:c:m:', \%opts);
-	die( printUsage() ) if(@ARGV == 0 and !$opts{i});
-=======
 my $num_cpu = 4;
 
 sub main{
@@ -32,7 +25,6 @@ sub main{
 	getopts('i:s:v:b:p:d:c:m:t:', \%opts);
 	die( printUsage() ) if(@ARGV == 0 and !$opts{i});
 	$num_cpu = $opts{t} if($opts{t});
->>>>>>> cfa3abc551b98b3f6a69fe82f672d7d23f5b5309
 	die("[MasterBisReadMapper] No sam file provided.\n") if(!$opts{i});
 	open(INFILE, "$opts{i}") || die("Cannot open input file(s) list\n");
 	while(my $line = <INFILE>){
