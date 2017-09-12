@@ -124,6 +124,8 @@ sub main(){
 	my $end_time = time;
 	my $time_taken = $end_time - $start_time;	
 	print "Finished mapping and converting reads in $time_taken\n";
+	unlink($encodedFqName1);
+	unlink($encodedFqName2);
 	sortsam($map_file);
 	undef %chrSizes;
 	my $total_mreads = 0;
@@ -195,6 +197,14 @@ sub processhit{
 	$f[9] = $clipped_s;
 	###-----------------END deal with CIGAR---------------------###
 
+	###----------------BEGIN deal with alt refs (with SNPs) ----###
+	if(!$chrSizes{$f[2]}){
+		my ($chr, $offset) = split "," , $f[2];
+		$f[2] = $chr;
+		$f[3] = $f[3] + $offset;
+	}
+	###----------------END deal with alt refs ------------------###
+
 	$total_mbases+=length($f[9]);
 	$countReads{$f[2]}++;
 	return @f[0...10];
@@ -202,7 +212,6 @@ sub processhit{
 
 sub sortsam{
 	my $map_file = shift;
-	#identify unique reads and save them in two files based on the templates.
 	my $combined_sorted_map_file = $fqName.".combined.sorted";
 	my $cmd = "sort -k 1,1 -T $TMP_DIR < $map_file > $combined_sorted_map_file";
 	system($cmd) == 0 or die "system problem (exit $?): $!\n";
@@ -210,20 +219,13 @@ sub sortsam{
 	
 	open(SAM_IN, "$combined_sorted_map_file") || die("Error in opening $combined_sorted_map_file.");
 
-	my %fileHandle;
-	foreach my $chr(keys %chrSizes){
-		my $fname = $fqName . "." . $chr . ".sam";
-		open ( $fileHandle{$chr}->{"h"} , ">$fname") || die("Error writing to file $fname\n");
-		$fileHandle{$chr}->{"n"} = $fname;
-	}
+	my $unsorted = $fqName . ".sam";
+	open ( SAM_OUT , ">$unsorted") || die("Error writing to file $unsorted\n");
 	my $last_line = 0;
 	my @last_fields;
 	my $last_cnt = 0;
 	while(my $line =  <SAM_IN>){
-		#next if($line =~ m/XS:i/ && $bowtie2_exe);
 		my @fields = split(/\t/, $line);
-		#next if(scalar(@fields) < 5); # skip the header lines
-		#next if($fields[4] < 5); # skip if MAPQ is less than 5
 		next if(scalar(@fields) < 5 or $fields[0] =~ /^@/);
 		if($fields[5]){ # CIGAR
 			next if($fields[5] eq "*");
@@ -243,11 +245,6 @@ sub sortsam{
 			next;
 		}
 		if($fields[0] eq $last_fields[0]){
-			#my @tmp = split ":", $fields[11];
-			#my $score = pop(@tmp);
-			#@tmp = split ":", $last_fields[11];
-			#my $last_score = pop(@tmp);
-			#undef(@tmp);
 			my $score = $fields[4];
 			my $last_score = $last_fields[4];
 			if($score > $last_score){
@@ -268,7 +265,7 @@ sub sortsam{
 				next;
 			}
 			if(my @hit = processhit(\@last_fields)){
-				print {$fileHandle{$hit[2]}->{"h"}} join("\t", @hit), "\n";
+				print SAM_OUT join("\t", @hit), "\n";
 			}else{
 				print "Wrong guess for ", $last_fields[0], "\n";
 				$missed_guesses++;
@@ -280,21 +277,18 @@ sub sortsam{
 	#print the last line
 	if($last_line and $last_cnt eq 0){
 		if(my @hit = processhit(\@last_fields)){
-			print {$fileHandle{$hit[2]}->{"h"}} join("\t", @hit), "\n";
+			print SAM_OUT join("\t", @hit), "\n";
 		}else{
 			print "Wrong guess for ", $last_fields[0], "\n";
 			$missed_guesses++;
 		}
 	}
 	close(SAM_IN);
+	close(SAM_OUT);
 	unlink($combined_sorted_map_file);
-	foreach my $chr (keys %fileHandle){
-		close($fileHandle{$chr}->{"h"});
-		my $unsorted = $fileHandle{$chr}->{"n"};
-		$cmd = "sort -T $TMP_DIR -k4,4n $unsorted > $fqName.$chr.sorted.sam";
-		system($cmd) == 0 or die "system problem (exit $?): $!\n";
-		unlink($unsorted);
-	}
+	$cmd = "sort -T $TMP_DIR -k1,1d -k4,4n $unsorted > $fqName.sorted.sam";
+	system($cmd) == 0 or die "system problem (exit $?): $!\n";
+	unlink($unsorted);
 }
 
 ###----------------- SOAP mapper-------------------###
@@ -384,12 +378,12 @@ sub fastq2BWAse(){
         my $options = "mem -t $cpu -B2 -c 1000";
         my $map_file = $fqName.".bwa.sam";
 
-        my $cmd = "$bwa_exe $options $template_fwd $encodedFqName1 | awk '{if(\$5 > 5) print \$0}' > $map_file";
+        my $cmd = "$bwa_exe $options $template_fwd $encodedFqName1 | awk '{if(\$5 >= 5) print \$0}' > $map_file";
         system($cmd) == 0 or die "system problem (exit $?): $!\n";
         print "$cmd\n";
 
 	return ($map_file) if(!$template_rev);
-        $cmd = "$bwa_exe $options $template_rev $encodedFqName1 | awk '{if(\$5>5) print \$0}' >> $map_file";
+        $cmd = "$bwa_exe $options $template_rev $encodedFqName1 | awk '{if(\$5 >= 5) print \$0}' >> $map_file";
         system($cmd) == 0 or die "system problem (exit $?): $!\n";
         print "$cmd\n";
 	return ($map_file);
@@ -399,12 +393,12 @@ sub fastq2BWApe(){
         my $options = "mem -t $cpu -B2 -c 1000 -a";
         my $map_file = $fqName.".bwa.PE.sam";
 
-        my $cmd = "$bwa_exe $options $template_fwd $encodedFqName1 $encodedFqName2 | awk '{if(\$5>5) print \$0}' > $map_file";
+        my $cmd = "$bwa_exe $options $template_fwd $encodedFqName1 $encodedFqName2 | awk '{if(\$5 >= 5) print \$0}' > $map_file";
         system($cmd) == 0 or die "system problem (exit $?): $!\n";
         print "$cmd\n";
 	
 	return ($map_file) if(!$template_rev);
-        $cmd = "$bwa_exe $options $template_rev $encodedFqName1 $encodedFqName2 | awk '{if(\$5>5)print \$0}' >> $map_file";
+        $cmd = "$bwa_exe $options $template_rev $encodedFqName1 $encodedFqName2 | awk '{if(\$5 >= 5)print \$0}' >> $map_file";
         system($cmd) == 0 or die "system problem (exit $?): $!\n";
         print "$cmd\n";
         return ($map_file);

@@ -1,0 +1,37 @@
+Reads: SimulatedReads_SE_noUMI_map/SimulatedReads_1_trimmed.fq
+SampleName: SimulatedReads_SE_noUMI_map/r0.SimulatedReads_1.gz
+Aligning with /media/Home_Raid1/dinh/softwares/bwa-0.7.5a/bwa
+Reads: SimulatedReads_SE_noUMI_map/SimulatedReads_1_trimmed.fq
+Finish encoding reads.
+/media/Home_Raid1/dinh/softwares/bwa-0.7.5a/bwa mem -t 4 -B2 -c 1000 /media/12TB_ext/DD_Ext12T/BisRef/bisHg19_plusLambda_BWA/hg19_lambda.bis.CT SimulatedReads_SE_noUMI_map/r0.SimulatedReads_1.gz.1.encoded | awk '{if($5 > 5) print $0}' > SimulatedReads_SE_noUMI_map/r0.SimulatedReads_1.gz.bwa.sam
+/media/Home_Raid1/dinh/softwares/bwa-0.7.5a/bwa mem -t 4 -B2 -c 1000 /media/12TB_ext/DD_Ext12T/BisRef/bisHg19_plusLambda_BWA/hg19_lambda.bis.GA SimulatedReads_SE_noUMI_map/r0.SimulatedReads_1.gz.1.encoded | awk '{if($5>5) print $0}' >> SimulatedReads_SE_noUMI_map/r0.SimulatedReads_1.gz.bwa.sam
+Finished mapping and converting reads in 98
+Wrong guess for Hg19.GA.OneMillion150bp.fq.000002597/1|TAATCTTTATTATTTTTTCTATTAATTTTAAATTTAAATTTTAATTTTTTTAATCTATTTATCCAATCTATATATCTTAATTAAAAAATTTATTCCATTTACAATCAATATTATTATTATTTATATTATTATAAATATTTATATATTATT|R
+chr9	711
+chrY	90
+chr13	664
+chr17	533
+chr7	1052
+chr16	517
+chr20	407
+chr19	349
+chr3	1223
+chr18	494
+chrX	893
+chr10	878
+chr15	543
+chr5	1131
+chr21	274
+chr4	1274
+chr12	926
+chr14	581
+chr1	1421
+chr22	201
+chr8	1012
+chr6	1146
+chr2	1571
+chr11	889
+Total sequences	20000
+Total bases	2998948
+Total mapped bases	2815593
+Total wrong guesses	1

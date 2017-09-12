@@ -1,0 +1,35 @@
+Reads: SimulatedReads_XX_noUMI_map/SimulatedReads_XX_trimmed.fq
+SampleName: SimulatedReads_XX_noUMI_map/r0.SimulatedReads_XX.gz
+Aligning with /media/Home_Raid1/dinh/softwares/bwa-0.7.16a/bwa
+Reads: SimulatedReads_XX_noUMI_map/SimulatedReads_XX_trimmed.fq
+Finish encoding reads.
+/media/Home_Raid1/dinh/softwares/bwa-0.7.16a/bwa mem -t 4 -B2 -c 1000 /media/NAS1/DD_NAS1/AfricanReference/bisHg19_plusLambda_plusAfricanSNPs_BWA/hg19_plusLambda_plusAfricanSNPs.bis.CT SimulatedReads_XX_noUMI_map/r0.SimulatedReads_XX.gz.1.encoded | awk '{if($5 >= 5) print $0}' > SimulatedReads_XX_noUMI_map/r0.SimulatedReads_XX.gz.bwa.sam
+/media/Home_Raid1/dinh/softwares/bwa-0.7.16a/bwa mem -t 4 -B2 -c 1000 /media/NAS1/DD_NAS1/AfricanReference/bisHg19_plusLambda_plusAfricanSNPs_BWA/hg19_plusLambda_plusAfricanSNPs.bis.GA SimulatedReads_XX_noUMI_map/r0.SimulatedReads_XX.gz.1.encoded | awk '{if($5 >= 5) print $0}' >> SimulatedReads_XX_noUMI_map/r0.SimulatedReads_XX.gz.bwa.sam
+Finished mapping and converting reads in 131
+chr11	7
+chrX	16
+chr12	10
+chr22	4
+chr8	17
+chr18	9
+chr20	6
+chr17	7
+chr5	13
+chr9	8
+chr15	5
+chr7	16
+chr13	7
+chr14	12
+chr21	2
+chr1	21
+chr16	6
+chr10	7
+chr4	19
+chr2	18
+chr3	12
+chr19	3
+chr6	15
+Total sequences	250
+Total bases	37442
+Total mapped bases	35942
+Total wrong guesses	0

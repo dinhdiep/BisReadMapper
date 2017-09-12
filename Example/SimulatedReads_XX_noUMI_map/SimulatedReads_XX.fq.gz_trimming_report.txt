@@ -1,0 +1,41 @@
+
+SUMMARISING RUN PARAMETERS
+==========================
+Input filename: Reads/SimulatedReads_XX.fq.gz
+Quality Phred score cutoff: 20
+Quality encoding type selected: ASCII+33
+Adapter sequence: 'GATCGGAAGAGCACACGTCTGAACTCCAGTCAC'
+Maximum trimming error rate: 0.1 (default)
+Minimum required adapter overlap (stringency): 5 bp
+Minimum required sequence length before a sequence gets removed: 20 bp
+File was specified to be an MspI-digested RRBS sample. Sequences with adapter contamination will be trimmed a further 2 bp to remove potential methylation-biased bases from the end-repair reaction
+File was specified to be a non-directional MspI-digested RRBS sample. Sequences starting with either 'CAA' or 'CGA' will have the first 2 bp trimmed off to remove potential methylation-biased bases from the end-repair reaction
+
+
+This is cutadapt 1.12 with Python 2.7.12
+Command line parameters: -f fastq -e 0.1 -O 5 -a GATCGGAAGAGCACACGTCTGAACTCCAGTCAC SimulatedReads_XX_noUMI_map/SimulatedReads_XX.fq.gz_qual_trimmed.fastq
+Trimming 1 adapter with at most 10.0% errors in single-end mode ...
+Finished in 0.01 s (40 us/read; 1.50 M reads/minute).
+
+=== Summary ===
+
+Total reads processed:                     250
+Reads with adapters:                         0 (0.0%)
+Reads written (passing filters):           250 (100.0%)
+
+Total basepairs processed:        37,446 bp
+Total written (filtered):         37,446 bp (100.0%)
+
+=== Adapter 1 ===
+
+Sequence: GATCGGAAGAGCACACGTCTGAACTCCAGTCAC; Type: regular 3'; Length: 33; Trimmed: 0 times.
+
+
+RUN STATISTICS FOR INPUT FILE: Reads/SimulatedReads_XX.fq.gz
+=============================================
+250 sequences processed in total
+Sequences were truncated to a varying degree because of deteriorating qualities (Phred score quality cutoff: 20):	2 (0.8%)
+Sequences removed because they became shorter than the length cutoff of 20 bp:	0 (0.0%)
+RRBS reads trimmed by additional 2 bp when adapter contamination was detected:	0 (0.0%)
+RRBS reads trimmed by 2 bp at the start when read started with CAA (2) or CGA (0) in total:	2 (0.8%)
+

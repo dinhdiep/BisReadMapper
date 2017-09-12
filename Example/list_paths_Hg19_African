@@ -1,0 +1,23 @@
+# Required
+scripts_dir="~/scripts/BisReadMapper/src"
+samtools="~/softwares/samtools-0.1.18/samtools"
+bamUtils="~/softwares/bamUtil_1.0.12/bamUtil/bin/bam"
+
+cpg_list="/media/12TB_ext/DD_Ext12T/BisRef/bisHg19_plusLambda_BWA/hg19_lambda.cpg.positions.txt"
+ref_fai="/media/12TB_ext/DD_Ext12T/BisRef/bisHg19_plusLambda_BWA/hg19_lambda.fa.fai"
+ref_fa="/media/12TB_ext/DD_Ext12T/BisRef/bisHg19_plusLambda_BWA/hg19_lambda.fa"
+
+# for mapping
+template_fwd="/media/NAS1/DD_NAS1/AfricanReference/bisHg19_plusLambda_plusAfricanSNPs_BWA/hg19_plusLambda_plusAfricanSNPs.bis.CT"
+template_rev="/media/NAS1/DD_NAS1/AfricanReference/bisHg19_plusLambda_plusAfricanSNPs_BWA/hg19_plusLambda_plusAfricanSNPs.bis.GA"
+
+mapper="~/softwares/bwa-0.7.16a/bwa"
+trimgalore="~/softwares/trim_galore_latest/trim_galore"
+
+# for snp calling
+samtools_snp="~/softwares/samtools-0.1.8/samtools"
+snp_list="NA"
+ref_dbsnp="NA"
+
+# for targeted sequencing
+target_bed="NA"

@@ -1,0 +1,36 @@
+Reads: SimulatedReads_PE_UMI_map/r0.SimulatedReads_1.gz.PE.R1_val_1.fq
+SampleName: SimulatedReads_PE_UMI_map/r0.SimulatedReads_1.gz.PE
+Aligning with /media/Home_Raid1/dinh/softwares/bwa-0.7.5a/bwa
+Reads: SimulatedReads_PE_UMI_map/r0.SimulatedReads_1.gz.PE.R1_val_1.fq
+Finish encoding reads.
+/media/Home_Raid1/dinh/softwares/bwa-0.7.5a/bwa mem -t 4 -B2 -c 1000 /media/12TB_ext/DD_Ext12T/BisRef/bisHg19_plusLambda_BWA/hg19_lambda.bis.CT SimulatedReads_PE_UMI_map/r0.SimulatedReads_1.gz.PE.1.encoded | awk '{if($5 > 5) print $0}' > SimulatedReads_PE_UMI_map/r0.SimulatedReads_1.gz.PE.bwa.sam
+/media/Home_Raid1/dinh/softwares/bwa-0.7.5a/bwa mem -t 4 -B2 -c 1000 /media/12TB_ext/DD_Ext12T/BisRef/bisHg19_plusLambda_BWA/hg19_lambda.bis.GA SimulatedReads_PE_UMI_map/r0.SimulatedReads_1.gz.PE.1.encoded | awk '{if($5>5) print $0}' >> SimulatedReads_PE_UMI_map/r0.SimulatedReads_1.gz.PE.bwa.sam
+Finished mapping and converting reads in 124
+chr3	2485
+chr6	2314
+chr9	1415
+chr10	1771
+chr2	3163
+chr8	2048
+chr15	1105
+chr12	1839
+chr7	2122
+chr14	1183
+chr13	1326
+chr17	1100
+chr1	2874
+chr20	826
+chr5	2279
+chr16	1056
+chr4	2579
+chrY	193
+chr22	412
+chr21	539
+chr18	1001
+chr11	1800
+chr19	712
+chrX	1828
+Total sequences	40000
+Total bases	5877939
+Total mapped bases	5579388
+Total wrong guesses	0
