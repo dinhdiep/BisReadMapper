@@ -255,8 +255,8 @@ sub sortsam{
 			}elsif($score == $last_score){
 				#check if one is from alternate reference (alternate references are not listed in fai file)
 				#two equivalent good hits, increment last_cnt
-				$last_ref = $last_fields[2];
-				$ref = $fields[2];
+				my $last_ref = $last_fields[2];
+				my $ref = $fields[2];
 				$last_ref =~ s/_Crick//;
 				$last_ref =~ s/_Watson//;
 				$ref =~ s/_Crick//;
