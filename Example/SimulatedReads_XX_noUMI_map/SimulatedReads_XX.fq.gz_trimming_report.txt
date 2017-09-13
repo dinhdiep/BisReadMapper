@@ -23,8 +23,8 @@ Total reads processed:                     250
 Reads with adapters:                         0 (0.0%)
 Reads written (passing filters):           250 (100.0%)
 
-Total basepairs processed:        37,446 bp
-Total written (filtered):         37,446 bp (100.0%)
+Total basepairs processed:        37,448 bp
+Total written (filtered):         37,448 bp (100.0%)
 
 === Adapter 1 ===
 

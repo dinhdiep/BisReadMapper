@@ -124,8 +124,8 @@ sub main(){
 	my $end_time = time;
 	my $time_taken = $end_time - $start_time;	
 	print "Finished mapping and converting reads in $time_taken\n";
-	unlink($encodedFqName1);
-	unlink($encodedFqName2);
+	#unlink($encodedFqName1);
+	#unlink($encodedFqName2);
 	sortsam($map_file);
 	undef %chrSizes;
 	my $total_mreads = 0;
@@ -245,8 +245,10 @@ sub sortsam{
 			next;
 		}
 		if($fields[0] eq $last_fields[0]){
-			my $score = $fields[4];
-			my $last_score = $last_fields[4];
+			my $score = $fields[13];
+			$score =~ s/\D//g;
+			my $last_score = $last_fields[13];
+			$last_score =~ s/\D//g;
 			if($score > $last_score){
 				#2nd line is a better hit
 				$last_line = $line;
@@ -382,30 +384,30 @@ sub fastq2BOWTIEpe(){
 ###----------------- BWA mem mapper-------------------###
 sub fastq2BWAse(){
         # Set the correct mapping parameters
-        my $options = "mem -t $cpu -B2 -c 1000";
+        my $options = "mem -a -t $cpu -B2 -c 1000";
         my $map_file = $fqName.".bwa.sam";
 
-        my $cmd = "$bwa_exe $options $template_fwd $encodedFqName1 | awk '{if(\$5 >= 5) print \$0}' > $map_file";
+        my $cmd = "$bwa_exe $options $template_fwd $encodedFqName1 > $map_file";
         system($cmd) == 0 or die "system problem (exit $?): $!\n";
         print "$cmd\n";
 
 	return ($map_file) if(!$template_rev);
-        $cmd = "$bwa_exe $options $template_rev $encodedFqName1 | awk '{if(\$5 >= 5) print \$0}' >> $map_file";
+        $cmd = "$bwa_exe $options $template_rev $encodedFqName1 >> $map_file";
         system($cmd) == 0 or die "system problem (exit $?): $!\n";
         print "$cmd\n";
 	return ($map_file);
 }
 sub fastq2BWApe(){
         # Set the correct mapping parameters
-        my $options = "mem -t $cpu -B2 -c 1000 -a";
+        my $options = "mem -a -t $cpu -B2 -c 1000";
         my $map_file = $fqName.".bwa.PE.sam";
 
-        my $cmd = "$bwa_exe $options $template_fwd $encodedFqName1 $encodedFqName2 | awk '{if(\$5 >= 5) print \$0}' > $map_file";
+        my $cmd = "$bwa_exe $options $template_fwd $encodedFqName1 $encodedFqName2 > $map_file";
         system($cmd) == 0 or die "system problem (exit $?): $!\n";
         print "$cmd\n";
 	
 	return ($map_file) if(!$template_rev);
-        $cmd = "$bwa_exe $options $template_rev $encodedFqName1 $encodedFqName2 | awk '{if(\$5 >= 5)print \$0}' >> $map_file";
+        $cmd = "$bwa_exe $options $template_rev $encodedFqName1 $encodedFqName2 >> $map_file";
         system($cmd) == 0 or die "system problem (exit $?): $!\n";
         print "$cmd\n";
         return ($map_file);
