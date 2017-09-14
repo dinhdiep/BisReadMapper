@@ -384,7 +384,7 @@ sub fastq2BOWTIEpe(){
 ###----------------- BWA mem mapper-------------------###
 sub fastq2BWAse(){
         # Set the correct mapping parameters
-        my $options = "mem -a -t $cpu -B2 -c 1000";
+        my $options = "mem -t $cpu -B2 -c 1000";
         my $map_file = $fqName.".bwa.sam";
 
         my $cmd = "$bwa_exe $options $template_fwd $encodedFqName1 > $map_file";
@@ -399,7 +399,7 @@ sub fastq2BWAse(){
 }
 sub fastq2BWApe(){
         # Set the correct mapping parameters
-        my $options = "mem -a -t $cpu -B2 -c 1000";
+        my $options = "mem -t $cpu -B2 -c 1000";
         my $map_file = $fqName.".bwa.PE.sam";
 
         my $cmd = "$bwa_exe $options $template_fwd $encodedFqName1 $encodedFqName2 > $map_file";
