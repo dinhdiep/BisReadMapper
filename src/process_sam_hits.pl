@@ -235,21 +235,6 @@ sub sortsam{
 	unlink($unsorted);
 }
 
-	my $options = "--phred$qual_base --very-sensitive --score-min $score_min -p $cpu -I 0 -X 1000 --no-discordant --no-unal --no-head";
-	my $map_file = $fqName.".bowtie.PE.sam";
-	# note: XS:i: defined as multimapping is specific to bowtie only.
-	my $cmd = "$bowtie2_exe $options -x $template_fwd -1 $encodedFqName1 -2 $encodedFqName2 | grep -v XS:i: > $map_file";
-	system($cmd) == 0 or die "system problem (exit $?): $!\n";
-	print "$cmd\n";
-
-	return ($map_file) if(!$template_rev);
-	$cmd = "$bowtie2_exe $options -x $template_rev -1 $encodedFqName1 -2 $encodedFqName2 | grep -v XS:i: >> $map_file";
-	system($cmd) == 0 or die "system problem (exit $?): $!\n";
-	print "$cmd\n";
-	
-	return ($map_file);
-}
-
 sub revComp{
 	my $seq = shift;
 	my $rcSeq='';
