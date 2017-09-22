@@ -148,9 +148,6 @@ sub processhit{
 sub sortsam{
 	my $map_file = shift;
 	my $combined_sorted_map_file = $fqName.".combined.sorted";
-	my $cmd = "sort -k 1,1 -T $TMP_DIR < $map_file > $combined_sorted_map_file";
-	system($cmd) == 0 or die "system problem (exit $?): $!\n";
-	unlink($map_file);
 	
 	open(SAM_IN, "$combined_sorted_map_file") || die("Error in opening $combined_sorted_map_file.");
 
@@ -229,10 +226,6 @@ sub sortsam{
 	}
 	close(SAM_IN);
 	close(SAM_OUT);
-	unlink($combined_sorted_map_file);
-	$cmd = "sort -T $TMP_DIR -k1,1d -k4,4n $unsorted > $fqName.sorted.sam";
-	system($cmd) == 0 or die "system problem (exit $?): $!\n";
-	unlink($unsorted);
 }
 
 sub revComp{
